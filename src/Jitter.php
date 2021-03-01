@@ -5,8 +5,6 @@
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-declare(strict_types=1);
-
 namespace codewithkyle\Jitter;
 
 use Imagick;
@@ -16,7 +14,7 @@ class Jitter
     public static function Transform(string $tempImage, array $transform, string $resizeOn = null): void
     {
         self::transformImage($tempImage, $transform, $resizeOn);
-        self::convertImage($tempImage, $transform);
+        self::convertImageFormat($tempImage, $transform);
     }
 
     private static function transformImage(string $tempImage, array $transform, string $resizeOn = null): void
@@ -24,7 +22,7 @@ class Jitter
         $img = new Imagick($tempImage);
         $img->setImageCompression(Imagick::COMPRESSION_NO);
         $img->setImageCompressionQuality(100);
-        $img->setOption("png:compression-level", 9);
+        $img->setOption("png:compression-level", "9");
 
         switch ($transform["mode"]) {
             case "fit":
