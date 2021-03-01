@@ -1,0 +1,22 @@
+{
+    "name": "codewithkyle/jitter",
+    "description": "An Imgix inspired image transformation library.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kyle Andrews",
+            "email": "codingwithkyle@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2 || ^8"
+    },
+    "autoload": {
+        "psr-4": {
+            "codewithkyle\\Jitter\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
