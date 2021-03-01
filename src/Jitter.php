@@ -82,6 +82,11 @@ class Jitter
                 $img->setImageCompressionQuality($transform["quality"]);
                 $img->writeImage($tempImage);
                 break;
+            case "jpg":
+                $img->setImageFormat("jpeg");
+                $img->setImageCompressionQuality($transform["quality"]);
+                $img->writeImage($tempImage);
+                break;
             case "gif":
                 $img->setImageFormat("gif");
                 $img->setImageCompressionQuality($transform["quality"]);
