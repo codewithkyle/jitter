@@ -5,7 +5,7 @@
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace codewithkyle\Jitter;
+namespace codewithkyle\jittercore;
 
 use Imagick;
 
@@ -15,6 +15,110 @@ class Jitter
     {
         self::transformImage($tempImage, $transform, $resizeOn);
         self::convertImageFormat($tempImage, $transform);
+    }
+
+    public static function BuildTransform(array $params, int $baseImageWidth, int $baseImageHeight, string $fallbackFormat = "png"): array
+    {
+        $clientAcceptsWebp = strpos($_SERVER["HTTP_ACCEPT"], "image/webp") !== false;
+        $width = $baseImageWidth;
+        $height = $baseImageHeight;
+        $aspectRatioValues = [$width, $height];
+        if (isset($params["ar"])) {
+            $values = explode(":", $params["ar"]);
+            if (count($values) == 2) {
+                $aspectRatioValues = [intval($values[0]), intval($values[1])];
+            }
+        }
+
+        if (isset($params["w"]) && isset($params["h"])) {
+            $width = intval($params["w"]);
+            $height = intval($params["h"]);
+        } elseif (isset($params["w"])) {
+            $width = intval($params["w"]);
+            $height = ($aspectRatioValues[1] / $aspectRatioValues[0]) * $width;
+        } elseif (isset($params["h"])) {
+            $height = intval($params["h"]);
+            $width = ($aspectRatioValues[0] / $aspectRatioValues[1]) * $height;
+        }
+
+        $quality = 80;
+        if (isset($params["q"])) {
+            $quality = intval($params["q"]);
+        }
+
+        $mode = "clip";
+        if (isset($params["m"])) {
+            $mode = $params["m"];
+        }
+
+        $bg = "ffffff";
+        if (isset($params["bg"])) {
+            $bg = ltrim($params["bg"], "#");
+        }
+
+        $focusPoints = [];
+        if (isset($params["fp-x"]) && isset($params["fp-y"])) {
+            $focusPoints[0] = floatval($params["fp-x"]);
+            if ($focusPoints[0] < 0) {
+                $focusPoints[0] = 0;
+            }
+            if ($focusPoints[0] > 1) {
+                $focusPoints[0] = 1;
+            }
+
+            $focusPoints[1] = floatval($params["fp-y"]);
+            if ($focusPoints[1] < 0) {
+                $focusPoints[1] = 0;
+            }
+            if ($focusPoints[1] > 1) {
+                $focusPoints[1] = 1;
+            }
+        } else {
+            $focusPoints = [0.5, 0.5];
+        }
+
+        $format = "auto";
+        if (isset($params["fm"])) {
+            switch ($params["fm"]) {
+                case "gif":
+                    $format = "gif";
+                    break;
+                case "jpeg":
+                    $format = "jpeg";
+                    break;
+                case "webp":
+                    if (!$clientAcceptsWebp){
+                        $format = $fallbackFormat;
+                    } else {
+                        $format = "webp";
+                    }
+                    break;
+                case "png":
+                    $format = "png";
+                    break;
+                default:
+                    $format = "auto";
+                    break;
+            }
+        }
+        if ($format === "auto") {
+            if ($clientAcceptsWebp) {
+                $format = "webp";
+            } else {
+                $format = $fallbackFormat;
+            }
+        }
+
+        $transform = [
+            "width" => round($width),
+            "height" => round($height),
+            "format" => $format,
+            "mode" => $mode,
+            "quality" => $quality,
+            "background" => $bg,
+            "focusPoint" => $focusPoints,
+        ];
+        return $transform;
     }
 
     private static function transformImage(string $tempImage, array $transform, string $resizeOn = null): void
@@ -97,7 +201,7 @@ class Jitter
                 $img->setImageCompressionQuality($transform["quality"]);
                 $img->writeImage($tempImage);
                 break;
-            default:
+            case "webp":
                 if (\count(\Imagick::queryFormats("WEBP")) > 0 || file_exists("/usr/bin/cwebp")) {
                     if (\count(\Imagick::queryFormats("WEBP")) > 0) {
                         $img->setImageFormat("webp");
@@ -108,6 +212,8 @@ class Jitter
                         shell_exec($command);
                     }
                 }
+                break;
+            default:
                 break;
         }
     }
