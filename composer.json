@@ -1,5 +1,6 @@
 {
     "name": "codewithkyle/jitter-core",
+    "version": "1.0.0",
     "description": "An Imgix inspired image transformation library.",
     "type": "library",
     "license": "MIT",

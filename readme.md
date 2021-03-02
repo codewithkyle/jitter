@@ -30,7 +30,7 @@ class ImageController
         $imageFilePath = "./my-image.jpg";
         list($width, $height, $type, $attr) = getimagesize($imageFilePath);
         $fallbackFormat = "jpg"; // image format fallback for when the format is set to 'auto' or 'webp' but the client doesn't support 'webp' (Safari <=13.1) -- defaults to 'png'
-        $params = ["w" => 32, "ar" => "1:1"]; // See transformation parameter table below
+        $params = ["w" => 32, "ar" => "1:1"]; // See transformation parameter table below for more options
         $resizeOn = "w"; // used to determine what side of the image should be used when calculating the resize -- accepts 'width', 'w', 'height', or 'h' and null (default)
 
         $transformSettings = Jitter::BuildTransform($params, $width, $height, $fallbackFormat);
