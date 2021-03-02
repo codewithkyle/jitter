@@ -21,7 +21,7 @@ sudo apt install webp
 Transforming images:
 
 ```php
-use codewithkyle\jittercore\Jitter;
+use codewithkyle\JitterCore\Jitter;
 
 class ImageController
 {
