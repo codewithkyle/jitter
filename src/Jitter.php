@@ -5,7 +5,7 @@
  * @license https://opensource.org/licenses/MIT MIT License
  */
 
-namespace codewithkyle\jittercore;
+namespace codewithkyle\JitterCore;
 
 use Imagick;
 
