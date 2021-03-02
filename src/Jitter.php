@@ -11,9 +11,9 @@ use Imagick;
 
 class Jitter
 {
-    public static function Transform(string $tempImage, array $transform, string $resizeOn = null): void
+    public static function TransformImage(string $tempImage, array $transform, string $resizeOn = null): void
     {
-        self::transformImage($tempImage, $transform, $resizeOn);
+        self::doImageTransform($tempImage, $transform, $resizeOn);
         self::convertImageFormat($tempImage, $transform);
     }
 
@@ -121,7 +121,7 @@ class Jitter
         return $transform;
     }
 
-    private static function transformImage(string $tempImage, array $transform, string $resizeOn = null): void
+    private static function doImageTransform(string $tempImage, array $transform, string $resizeOn = null): void
     {
         $img = new Imagick($tempImage);
         $img->setImageCompression(Imagick::COMPRESSION_NO);

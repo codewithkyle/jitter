@@ -4,17 +4,15 @@ Jitter is an image transformation library with an API is based on [Imgix](https:
 
 ## Requirements
 
-This library requires PHP ^7.2 or later and [ImageMagick](https://imagemagick.org/index.php).
+This library requires PHP 7.2 or later and [ImageMagick](https://imagemagick.org/index.php).
 
 ## Installation
 
 ```bash
 # Install the library via composer
-
 composer require codewithkyle/jitter-core
 
 # Optional webp support (recommended)
-
 sudo apt install webp
 ```
 
@@ -33,15 +31,15 @@ class ImageController
         list($width, $height, $type, $attr) = getimagesize($imageFilePath);
         $fallbackFormat = "jpg"; // image format fallback for when the format is set to 'auto' or 'webp' but the client doesn't support 'webp' (Safari <=13.1) -- defaults to 'png'
         $params = ["w" => 32, "ar" => "1:1"]; // See transformation parameter table below
-        $resizeOn = "w"; // Can be 'width', 'w', 'height', or 'h' -- used to determine what side of the image should be used when calculating the resize
+        $resizeOn = "w"; // used to determine what side of the image should be used when calculating the resize -- accepts 'width', 'w', 'height', or 'h' and null (default)
 
         $transformSettings = Jitter::BuildTransform($params, $width, $height, $fallbackFormat);
-        Jitter::Transform($imageFilePath, $transformSettings, $resizeOn);
+        Jitter::TransformImage($imageFilePath, $transformSettings, $resizeOn);
     }
 }
 ```
 
-Transformation parmas:
+Transformation parameters:
 
 | Parameter     | Default                    | Description                     | Valid options                               |
 | ------------- | -------------------------- | ------------------------------- | ------------------------------------------- |
