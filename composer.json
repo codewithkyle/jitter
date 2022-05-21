@@ -1,6 +1,6 @@
 {
     "name": "codewithkyle/jitter-core",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "An Imgix inspired image transformation library.",
     "type": "library",
     "license": "MIT",
@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^7.2"
+        "php": "^7.2|^8.0"
     },
     "autoload": {
         "psr-4": {
