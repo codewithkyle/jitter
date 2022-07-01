@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2022-07-01
+
+### Fixed
+
+- improved `BuildTransform()` performance ([#1](https://github.com/codewithkyle/jitter/issues/1))
+- fatal edge case that could occur when a machine lacked the 3rd party libraries required to generate WEBP images
+- improved `TransformImage()` performance
+
+### Removed
+
+- `BuildTransform()` no longer accepts the following parameters:
+    - width
+    - height
+    - fallbackFormat
+
 ## [1.1.0] - 2022-05-31
 
 ### Added
@@ -27,5 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - support for basic image transformations ([supported parameters](https://github.com/codewithkyle/jitter/tree/d75b3a1cc94ac018fb6b6b614e6580885331c793#using-jitter))
 
 [Unreleased]: https://github.com/codewithkyle/jitter/compare/v1.1.0...HEAD
+[2.0.0]: https://github.com/codewithkyle/jitter/releases/tag/v2.0.0
 [1.1.0]: https://github.com/codewithkyle/jitter/releases/tag/v1.1.0
 [1.0.0]: https://github.com/codewithkyle/jitter/releases/tag/v1.0.0

@@ -27,14 +27,14 @@ class ImageController
 {
     public function transformImage()
     {
-        $imageFilePath = "./my-image.jpg";
-        list($width, $height, $type, $attr) = getimagesize($imageFilePath);
-        $fallbackFormat = "jpg"; // image format fallback for when the format is set to 'auto' or 'webp' but the client doesn't support 'webp' (Safari <=13.1) -- defaults to 'png'
-        $params = ["w" => 32, "ar" => "1:1"]; // See transformation parameter table below for more options
-        $resizeOn = "w"; // used to determine what side of the image should be used when calculating the resize -- accepts 'width', 'w', 'height', or 'h' and null (default)
+        $imageFilePath = "./image.jpg"; // copy of source image (will be overwritten)
+        $params = ["w" => 320, "ar" => "1:1", "fm" => "jpg"]; // See transformation parameter table below for more options
 
-        $transformSettings = Jitter::BuildTransform($params, $width, $height, $fallbackFormat);
-        Jitter::TransformImage($imageFilePath, $transformSettings, $resizeOn);
+        $transformSettings = Jitter::BuildTransform($params); // Transform settings can be hashed with the base image's indentifier when caching
+        Jitter::TransformImage($imageFilePath, $transformSettings); // Manipulates and overwrites the image located at $imageFilePath
+
+        // Optional Next Steps:
+        // Save $imageFilePath a cloud provider (such as S3)
     }
 }
 ```
