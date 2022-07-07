@@ -132,8 +132,8 @@ class Jitter
         }
 
         $transform = [
-            "width" => round($width) ?? null,
-            "height" => round($height) ?? null,
+            "width" => $width,
+            "height" => $height,
             "format" => $format,
             "mode" => $mode,
             "quality" => $quality,
@@ -172,55 +172,55 @@ class Jitter
 
         if (!is_null($transform["width"]) && is_null($transform["height"]))
         {
-            $height = ($transform["aspectRatio"][1] / $transform["aspectRatio"][0]) * $width;
+            $height = round(($transform["aspectRatio"][1] / $transform["aspectRatio"][0]) * $width);
         }
         else if (is_null($transform["width"]) && !is_null($transform["height"]))
         {
-            $width = ($transform["aspectRatio"][0] / $transform["aspectRatio"][1]) * $height;
+            $width = round(($transform["aspectRatio"][0] / $transform["aspectRatio"][1]) * $height);
         }
 
         switch ($transform["mode"]) {
             case "fit":
-                $img->resizeImage($transform["width"], $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                $img->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 0.75);
                 $img->writeImage($tempImage);
                 break;
             case "letterbox":
                 $img->setImageBackgroundColor("#" . $transform["background"]);
-                $img->thumbnailImage($transform["width"], $transform["height"], true, true);
+                $img->thumbnailImage($width, $height, true, true);
                 $img->writeImage($tempImage);
                 break;
             case "croponly":
-                $leftPos = floor($baseImageWidth * $transform["focusPoint"][0]) - floor($transform["width"] / 2);
-                $leftPos = max(0, min($transform["width"], $leftPos));
-                $topPos = floor($baseImageHeight * $transform["focusPoint"][1]) - floor($transform["height"] / 2);
-                $topPos = max(0, min($transform["height"], $topPos));
-                $img->cropImage($transform["width"], $transform["height"], $leftPos, $topPos);
+                $leftPos = floor($baseImageWidth * $transform["focusPoint"][0]) - floor($width / 2);
+                $leftPos = max(0, min($width, $leftPos));
+                $topPos = floor($baseImageHeight * $transform["focusPoint"][1]) - floor($height / 2);
+                $topPos = max(0, min($height, $topPos));
+                $img->cropImage($width, $height, $leftPos, $topPos);
                 $img->writeImage($tempImage);
                 break;
             case "crop":
                 if (is_null($resizeOn))
                 {
-                    if ($transform["width"] < $transform["height"])
+                    if ($width < $height)
                     {
-                        $img->resizeImage($transform["width"], null, Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
                     }
-                    elseif ($transform["height"] < $transform["width"])
+                    elseif ($height < $width)
                     {
-                        $img->resizeImage(null, $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                     }
                     else
                     {
                         if ($baseImageWidth < $baseImageHeight)
                         {
-                            $img->resizeImage($transform["width"], null, Imagick::FILTER_LANCZOS, 0.75);
+                            $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
                         } 
                         elseif ($baseImageHeight < $baseImageWidth)
                         {
-                            $img->resizeImage(null, $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                            $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                         }
                         else
                         {
-                            $img->resizeImage($transform["width"], $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                            $img->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 0.75);
                         }
                     }
                 }
@@ -228,45 +228,45 @@ class Jitter
                 {
                     if ($resizeOn === "height" || $resizeOn === "h")
                     {
-                        $img->resizeImage(null, $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                     }
                     else
                     {
-                        $img->resizeImage($transform["width"], null, Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
                     }
                 }
 
-                $leftPos = floor($baseImageWidth * $transform["focusPoint"][0]) - floor($transform["width"] / 2);
-                $leftPos = max(0, min($transform["width"], $leftPos));
-                $topPos = floor($baseImageHeight * $transform["focusPoint"][1]) - floor($transform["height"] / 2);
-                $topPos = max(0, min($transform["height"], $topPos));
-                $img->cropImage($transform["width"], $transform["height"], $leftPos, $topPos);
+                $leftPos = floor($img->getImageWidth() * $transform["focusPoint"][0]) - floor($width / 2);
+                $leftPos = max(0, min($width, $leftPos));
+                $topPos = floor($img->getImageHeight() * $transform["focusPoint"][1]) - floor($height / 2);
+                $topPos = max(0, min($height, $topPos));
+                $img->cropImage($width, $height, $leftPos, $topPos);
                 $img->writeImage($tempImage);
                 break;
             default:
                 if (is_null($resizeOn))
                 {
-                    if ($transform["width"] < $transform["height"])
+                    if ($width < $height)
                     {
-                        $img->resizeImage($transform["width"], null, Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
                     }
-                    elseif ($transform["height"] < $transform["width"])
+                    elseif ($height < $width)
                     {
-                        $img->resizeImage(null, $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                     }
                     else
                     {
                         if ($baseImageWidth < $baseImageHeight)
                         {
-                            $img->resizeImage($transform["width"], null, Imagick::FILTER_LANCZOS, 0.75);
+                            $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
                         } 
                         elseif ($baseImageHeight < $baseImageWidth)
                         {
-                            $img->resizeImage(null, $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                            $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                         }
                         else
                         {
-                            $img->resizeImage($transform["width"], $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                            $img->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 0.75);
                         }
                     }
                 }
@@ -274,11 +274,11 @@ class Jitter
                 {
                     if ($resizeOn === "height" || $resizeOn === "h")
                     {
-                        $img->resizeImage(null, $transform["height"], Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                     }
                     else
                     {
-                        $img->resizeImage($transform["width"], null, Imagick::FILTER_LANCZOS, 0.75);
+                        $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
                     }
                 }
                 $img->writeImage($tempImage);

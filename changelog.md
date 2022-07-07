@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2022-07-07
+
+### Fixed
+
+- Jitter was occasionally using the incorrect width or height value
+
 ## [2.0.0] - 2022-07-01
 
 ### Fixed
@@ -41,7 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - public static `Jitter:TransformImage()` method
 - support for basic image transformations ([supported parameters](https://github.com/codewithkyle/jitter/tree/d75b3a1cc94ac018fb6b6b614e6580885331c793#using-jitter))
 
-[Unreleased]: https://github.com/codewithkyle/jitter/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/codewithkyle/jitter/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/codewithkyle/jitter/releases/tag/v2.0.1
 [2.0.0]: https://github.com/codewithkyle/jitter/releases/tag/v2.0.0
 [1.1.0]: https://github.com/codewithkyle/jitter/releases/tag/v1.1.0
 [1.0.0]: https://github.com/codewithkyle/jitter/releases/tag/v1.0.0
