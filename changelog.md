@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 2024-10-09
+
+### Fixed
+
+- `crop` resizing mode would occasioncally use the incorect width or hight value
+
 ## [2.0.1] - 2022-07-07
 
 ### Fixed
