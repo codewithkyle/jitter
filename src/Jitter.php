@@ -167,7 +167,14 @@ class Jitter
 
         if (count($transform["aspectRatio"]) != 2)
         {
-            $transform["aspectRatio"] = [$baseImageWidth, $baseImageHeight];
+            if (isset($transform["width"]) && isset($transform["height"]))
+            {
+                $transform["aspectRatio"] = [$transform["width"], $transform["height"]];
+            }
+            else
+            {
+                $transform["aspectRatio"] = [$baseImageWidth, $baseImageHeight];
+            }
         }
 
         if (!is_null($transform["width"]) && is_null($transform["height"]))
@@ -198,41 +205,29 @@ class Jitter
                 $img->writeImage($tempImage);
                 break;
             case "crop":
-                if (is_null($resizeOn))
+                $aspectRatio = $transform["aspectRatio"][0] / $transform["aspectRatio"][1];
+
+                if ($resizeOn === "height" || $resizeOn === "h")
                 {
-                    if ($width < $height)
-                    {
-                        $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
-                    }
-                    elseif ($height < $width)
-                    {
-                        $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
-                    }
-                    else
-                    {
-                        if ($baseImageWidth < $baseImageHeight)
-                        {
-                            $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
-                        } 
-                        elseif ($baseImageHeight < $baseImageWidth)
-                        {
-                            $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
-                        }
-                        else
-                        {
-                            $img->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 0.75);
-                        }
-                    }
+                    $width = (int)($height * $aspectRatio);
+                    $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
+                }
+                else if ($resizeOn === "width" || $resizeOn === "w")
+                {
+                    $height = (int)($width / $aspectRatio);
+                    $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                 }
                 else
                 {
-                    if ($resizeOn === "height" || $resizeOn === "h")
+                    if ($width / $height > $aspectRatio)
                     {
-                        $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
+                        $height = (int)($width / $aspectRatio);
+                        $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
                     }
                     else
                     {
-                        $img->resizeImage($width, null, Imagick::FILTER_LANCZOS, 0.75);
+                        $width = (int)($height * $aspectRatio);
+                        $img->resizeImage(null, $height, Imagick::FILTER_LANCZOS, 0.75);
                     }
                 }
 
